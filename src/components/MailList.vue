@@ -1,0 +1,82 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = defineProps<{
+    emails: any[];
+    selectedId: string | null;
+    offset: number;
+    limit: number;
+}>();
+
+const emit = defineEmits<{
+    (e: 'select', id: string): void;
+    (e: 'delete', id: string): void;
+    (e: 'setOffset', o: number): void;
+}>();
+
+const empty = computed(() => props.emails.length === 0);
+
+function onSelect(id: string) { emit('select', id); }
+function onDelete(id: string) { emit('delete', id); }
+function setOffset(o: number) { emit('setOffset', o); }
+</script>
+
+<template>
+    <div
+        class="w-full md:w-80 lg:w-96 border-r border-slate-100 bg-white flex flex-col shrink-0 h-full shadow-sm rounded-r-2xl">
+        <div class="flex-1 overflow-y-auto w-full">
+            <div v-if="empty"
+                class="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400 mt-20">
+                <i class="pi pi-inbox text-4xl opacity-20 mb-4"></i>
+                <p class="text-sm font-medium">No emails found</p>
+                <p class="text-xs">Check filters or fetch again.</p>
+            </div>
+
+            <div v-else>
+                <button v-for="email in emails" :key="email.id" @click="onSelect(email.id)" :class="[
+                    'w-full block text-left py-3 px-3 border-b border-slate-200 transition-colors hover:cursor-pointer hover:bg-slate-50 relative group outline-none',
+                    selectedId === email.id ? 'bg-indigo-50 border-l-4 border-indigo-500 pl-4' : ''
+                ]">
+                    <div class="flex justify-between items-start gap-2 w-full">
+                        <div class="flex items-center gap-3 overflow-hidden flex-1 min-w-0">
+                            <span v-if="!email.read" class="w-2 h-2 rounded-full bg-indigo-600 shrink-0 mt-1" />
+                            <div class="min-w-0">
+                                <div
+                                    :class="['truncate', !email.read ? 'font-semibold text-slate-900' : 'text-slate-600']">
+                                    {{ email.from_parsed?.[0]?.name || email.from }}</div>
+                                <div class="text-[12px] text-slate-400 truncate">{{ email.subject || '(no subject)' }}
+                                </div>
+                                <div class="mt-1"><span
+                                        class="inline-block px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold">{{
+                                        email.tag }}</span></div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <div class="text-xs text-slate-400">{{ new Date(email.timestamp).toLocaleTimeString() }}
+                            </div>
+                  
+                        </div>
+                    </div>
+
+                    <button @click.stop="onDelete(email.id)"
+                        class="absolute right-3 bottom-3 opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-50 text-red-400 hover:text-red-600 transition-all z-10">
+                        <i class="pi pi-trash" />
+                    </button>
+                </button>
+            </div>
+        </div>
+
+        <div class="h-12 border-t px-4 flex items-center justify-between bg-slate-50/50 shrink-0">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Offset: {{ offset }}</span>
+            <div class="flex gap-2">
+                <button :disabled="offset === 0" @click="setOffset(Math.max(0, offset - limit))"
+                    class="p-1 rounded hover:bg-white border disabled:opacity-30 transition-colors">
+                    <i class="pi pi-chevron-left" />
+                </button>
+                <button @click="setOffset(offset + limit)" class="p-1 rounded hover:bg-white border transition-colors">
+                    <i class="pi pi-chevron-right" />
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
