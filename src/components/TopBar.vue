@@ -5,6 +5,7 @@ const props = defineProps<{
   isLoading: boolean;
   filterTag: string;
   filterTimestamp: string;
+  filterSubject: string;
   limit: number;
 }>();
 
@@ -14,6 +15,7 @@ const emit = defineEmits<{
   (e: 'openMenu'): void;
   (e: 'update:filterTag', v: string): void;
   (e: 'update:filterTimestamp', v: string): void;
+  (e: 'update:filterSubject', v: string): void;
   (e: 'update:limit', v: number): void;
 }>();
 
@@ -24,6 +26,10 @@ function onSearchInput(e: Event) {
 
 function onTagInput(e: Event) {
   emit('update:filterTag', (e.target as HTMLInputElement).value);
+}
+
+function onSubjectInput(e: Event) {
+  emit('update:filterSubject', (e.target as HTMLInputElement).value);
 }
 
 function onTimestampInput(e: Event) {
@@ -59,10 +65,7 @@ function onLimitChange(e: Event) {
         <span v-if="props.lastRefreshed" class="text-[10px] uppercase font-bold text-slate-400 hidden lg:block tracking-widest">
           Synced {{ props.lastRefreshed ? props.lastRefreshed.toLocaleTimeString() : '-' }}
         </span>
-        <button @click="$emit('refresh')" :disabled="props.isLoading" class="inline-flex items-center gap-2 bg-green-500 text-white px-3 py-1.5 rounded-full shadow-sm hover:shadow-md">
-          <i class="pi pi-refresh" />
-          <span class="hidden sm:inline">Fetch</span>
-        </button>
+        <Button icon="pi pi-refresh" class="p-button-text"  :loading="props.isLoading" @click="$emit('refresh')"></Button>
       </div>
     </div>
 
@@ -76,6 +79,14 @@ function onLimitChange(e: Event) {
           class="bg-transparent border-none outline-none w-28 text-indigo-600 font-medium placeholder:text-slate-300"
           :value="props.filterTag"
           @input="onTagInput"
+          @keydown.enter="$emit('refresh')"
+        />
+        <input
+          type="text"
+          placeholder="Subject (server-side)"
+          class="bg-transparent border-none outline-none w-56 text-slate-600 placeholder:text-slate-300 ml-2"
+          :value="props.filterSubject"
+          @input="onSubjectInput"
           @keydown.enter="$emit('refresh')"
         />
         <div class="w-px h-4 bg-slate-200" />

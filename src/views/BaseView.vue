@@ -18,6 +18,7 @@ const mobileSidebarVisible = ref(false);
 const selectedEmailId = ref<string | null>(null);
 const searchQuery = ref('');
 const filterTag = ref('');
+const filterSubject = ref('');
 const filterTimestamp = ref('');
 const offset = ref(0);
 const limit = ref(config.value.defaultLimit || 10);
@@ -28,7 +29,8 @@ const { emails, isLoading, isLivePolling, error, lastRefreshed, fetchEmails, del
   limit: limit.value,
   offset: offset.value,
   filterTag: filterTag.value,
-  filterTimestamp: filterTimestamp.value
+  filterTimestamp: filterTimestamp.value,
+  filterSubject: filterSubject.value
 });
 
 // derived
@@ -36,9 +38,9 @@ const filteredEmails = computed(() => {
   const q = searchQuery.value.trim().toLowerCase();
   if (!q) return emails.value;
   return emails.value.filter(e =>
-    e.subject.toLowerCase().includes(q) ||
-    e.from.toLowerCase().includes(q) ||
-    e.tag.toLowerCase().includes(q)
+    (e.subject || '').toLowerCase().includes(q) ||
+    (e.from || '').toLowerCase().includes(q) ||
+    (e.tag || '').toLowerCase().includes(q)
   );
 });
 
@@ -65,7 +67,7 @@ function closeSettings() {
 }
 
 // react to param changes: re-fetch when filters/limit/offset change
-watch([limit, offset, filterTag, filterTimestamp], () => {
+watch([limit, offset, filterTag, filterTimestamp, filterSubject], () => {
   void fetchEmails({ isLiveQuery: false, forceLoadingState: true });
 });
 
@@ -140,6 +142,7 @@ function onRefresh() {
             :lastRefreshed="lastRefreshed"
             :isLoading="isLoading || isLivePolling"
             v-model:filterTag="filterTag"
+            v-model:filterSubject="filterSubject"
             v-model:filterTimestamp="filterTimestamp"
             v-model:limit="limit"
             @refresh="onRefresh"

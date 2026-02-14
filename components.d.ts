@@ -12,13 +12,17 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Avatar: typeof import('primevue/avatar')['default']
+    Badge: typeof import('primevue/badge')['default']
     Button: typeof import('primevue/button')['default']
+    Card: typeof import('primevue/card')['default']
+    Divider: typeof import('primevue/divider')['default']
     InputSwitch: typeof import('primevue/inputswitch')['default']
     InputText: typeof import('primevue/inputtext')['default']
     MailDetails: typeof import('./src/components/MailDetails.vue')['default']
     MailList: typeof import('./src/components/MailList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ScrollPanel: typeof import('primevue/scrollpanel')['default']
     Sidebar: typeof import('primevue/sidebar')['default']
     TopBar: typeof import('./src/components/TopBar.vue')['default']
   }

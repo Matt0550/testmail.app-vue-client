@@ -24,10 +24,10 @@
       "@components/*": ["./src/components/*"],
       "@composables/*": ["./src/composables/*"],
       "@services/*": ["./src/services/*"],
-      "@types/*": ["./src/types/*"],
+      "@models/*": ["./src/types/*"],
       "@utils/*": ["./src/utils/*"],
       "@views/*": ["./src/views/*"],
     }
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

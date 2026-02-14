@@ -6,7 +6,7 @@
       "@components/*": ["src/components/*"],
       "@composables/*": ["src/composables/*"],
       "@services/*": ["src/services/*"],
-      "@types/*": ["src/types/*"],
+      "@models/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"],
       "@views/*": ["src/views/*"],
     }

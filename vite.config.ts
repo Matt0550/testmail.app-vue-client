@@ -33,11 +33,12 @@ export default defineConfig({
     })
   ],
   resolve: {
+    extensions: ['.js', '.ts', '.vue', '.json'],
     alias: {
       '@composables': path.resolve(__dirname, 'src/composables'),
       '@components': path.resolve(__dirname, 'src/components'),
       '@services': path.resolve(__dirname, 'src/services'),
-      '@types': path.resolve(__dirname, 'src/types'),
+      '@models': path.resolve(__dirname, 'src/models'),
       '@utils': path.resolve(__dirname, 'src/utils'),
       '@views': path.resolve(__dirname, 'src/views'),
       '@assets': path.resolve(__dirname, 'src/assets'),

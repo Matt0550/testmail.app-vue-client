@@ -1,9 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200,300,400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tailwindcss-primeui";
-
+@import "primeicons/primeicons";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -13,9 +14,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Incidents modal */
-  --achiral-primary-color: var(--color-primary) !important;
-  --achiral-primary-hover: var(--color-primary-700) !important;
 }
 
 

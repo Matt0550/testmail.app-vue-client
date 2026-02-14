@@ -1,6 +1,6 @@
 
 import { openDB } from 'idb';
-import type { TestMailEmail } from '@types/mail';
+import type { TestMailEmail } from '@models/mail';
 
 const DB_NAME = 'testmail_db';
 const STORE_NAME = 'emails';

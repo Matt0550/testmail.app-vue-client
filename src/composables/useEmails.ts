@@ -1,7 +1,7 @@
 
 import { ref, watch, onMounted, onUnmounted, unref, isRef, type Ref } from 'vue';
-import type { TestMailEmail } from '@types/mail';
-import type { AppConfig } from '@types/config';
+import type { TestMailEmail } from '@models/mail';
+import type { AppConfig } from '@models/config';
 import { fetchEmailsApi } from '@services/api';
 import { saveEmailsToDB, getAllEmailsFromDB, deleteEmailFromDB, markAsReadInDB, clearEmailsDB } from '../services/db';
 
@@ -11,9 +11,11 @@ interface UseEmailsParams {
   offset: number;
   filterTag: string;
   filterTimestamp: string;
+  /** server-side subject filter (passed to GraphQL advanced_filters) */
+  filterSubject?: string;
 }
 
-export function useEmails({ config, limit, offset, filterTag, filterTimestamp }: UseEmailsParams) {
+export function useEmails({ config, limit, offset, filterTag, filterTimestamp, filterSubject }: UseEmailsParams) {
   const emails = ref<TestMailEmail[]>([]);
   const isLoading = ref(false);
   const isLivePolling = ref(false);
@@ -68,7 +70,8 @@ export function useEmails({ config, limit, offset, filterTag, filterTimestamp }:
         offset: params.isLiveQuery ? 0 : offset,
         tag: filterTag,
         timestamp_from,
-        liveQuery: !!params.isLiveQuery
+        liveQuery: !!params.isLiveQuery,
+        subject: filterSubject
       });
 
       if (data.result === 'success') {

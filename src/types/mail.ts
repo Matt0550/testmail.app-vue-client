@@ -11,37 +11,47 @@ export interface TestMailHeader {
 
 export interface TestMailAttachment {
   filename: string;
-  size: number;
-  contentDisposition: string;
-  checksum: string;
-  contentId: string;
-  contentType: string;
-  cid: string;
-  downloadUrl: string;
+  contentType?: string;
+  checksum?: string;
+  size?: number;
+  headers?: TestMailHeader[];
+  downloadUrl?: string;
+  contentId?: string;
+  cid?: string;
+  related?: boolean;
+  // keep older fields for compatibility
+  contentDisposition?: string;
 }
 
 export interface TestMailEmail {
   id: string;
-  oid: string;
-  from: string;
-  subject: string;
-  text?: string;
-  html?: string;
-  date: number;
-  timestamp: number;
-  tag: string;
+  oid?: string; // present in JSON API responses; optional for GraphQL
   namespace: string;
-  envelope_to: string;
-  envelope_from: string;
-  to_parsed: EmailParsedAddress[];
-  from_parsed: EmailParsedAddress[];
-  cc_parsed: EmailParsedAddress[];
-  attachments: TestMailAttachment[];
-  downloadUrl: string;
+  tag: string;
+  timestamp: number;
+  date?: number;
+  messageId?: string;
+  references?: string[];
+  envelope_from?: string;
+  envelope_to?: string;
+  from: string;
+  from_parsed?: EmailParsedAddress[];
+  to?: string;
+  to_parsed?: EmailParsedAddress[];
+  cc?: string;
+  cc_parsed?: EmailParsedAddress[];
+  subject: string;
   headers?: TestMailHeader[];
-  read?: boolean; // Local UI state
+  html?: string;
+  text?: string;
+  attachments?: TestMailAttachment[];
+  SPF?: string;
+  dkim?: string;
   spam_score?: number;
   spam_report?: string;
+  sender_ip?: string;
+  downloadUrl?: string;
+  read?: boolean; // Local UI state
 }
 
 export interface TestMailResponse {

@@ -1,6 +1,6 @@
 
 import { ref, watch } from 'vue';
-import type { AppConfig } from '@types/config';
+import type { AppConfig } from '@models/config';
 
 const STORAGE_KEY = 'testmail_config_v2';
 
