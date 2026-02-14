@@ -54,7 +54,7 @@ function onLimitChange(e: Event) {
           <input
             type="text"
             placeholder="Search locally..."
-            class="w-full bg-slate-100 border-none rounded-full py-2 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:ring-1 focus:ring-indigo-200 transition-all outline-none"
+            class="w-full bg-slate-100 border-none rounded-full py-2 pl-10 pr-4 text-sm text-slate-800 placeholder:text-slate-400 focus:ring-1 focus:ring-indigo-200 transition-all outline-none"
             :value="props.searchQuery"
             @input="onSearchInput"
           />

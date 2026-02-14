@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { formatEmailDate } from '@utils/date';
 
 const props = defineProps<{
     emails: any[];
@@ -22,8 +23,7 @@ function setOffset(o: number) { emit('setOffset', o); }
 </script>
 
 <template>
-    <div
-        class="w-full md:w-80 lg:w-96 border-r border-slate-100 bg-white flex flex-col shrink-0 h-full shadow-sm">
+    <div class="w-full md:w-80 lg:w-96 border-r border-slate-100 bg-white flex flex-col shrink-0 h-full shadow-sm">
         <div class="flex-1 overflow-y-auto w-full">
             <div v-if="empty"
                 class="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400 mt-20">
@@ -37,22 +37,25 @@ function setOffset(o: number) { emit('setOffset', o); }
                     'w-full block text-left py-3 px-3 pl-4 border-b border-slate-200 transition-colors hover:cursor-pointer hover:bg-slate-50 relative group outline-none',
                     selectedId === email.id ? 'bg-indigo-50 border-l-4 border-indigo-500' : ''
                 ]">
+                    <span v-if="!email.read" class="absolute left-1 top-4 w-2 h-2 rounded-full bg-indigo-600" />
                     <div class="flex justify-between items-start gap-2 w-full">
                         <div class="flex items-center gap-3 overflow-hidden flex-1 min-w-0">
-                            <span v-if="!email.read" class="w-2 h-2 rounded-full bg-indigo-600 shrink-0 mt-1" />
                             <div class="min-w-0">
                                 <div
-                                    :class="['truncate text-sm', !email.read ? 'font-semibold text-slate-900' : 'text-slate-600']">
+                                    :class="['truncate text-sm', !email.read ? 'font-semibold text-slate-800' : 'text-slate-600']">
                                     {{ email.from_parsed?.[0]?.name || email.from }}</div>
-                                <div class="text-[10px] text-slate-400 truncate">{{ email.subject || '(no subject)' }}
+                                <div :class="['text-xs text-slate-400 truncate', !email.read ? 'font-semibold text-slate-800' : '']">{{ email.subject || '(no subject)' }}
                                 </div>
+                                <!-- body preview -->
+                                <div class="text-[10px] text-slate-500 truncate mt-1">{{ email.text?.substring(0, 100)
+                                    || '(no body)' }}</div>
                                 <div class="mt-1"><span
                                         class="inline-block px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold">{{
                                             email.tag }}</span></div>
                             </div>
                         </div>
                         <div class="flex flex-col items-end gap-2">
-                            <div class="text-[10px] text-slate-400">{{ new Date(email.timestamp).toLocaleTimeString() }}
+                            <div class="text-[10px] text-slate-400">{{ formatEmailDate(email.timestamp) }}
                             </div>
 
                         </div>

@@ -41,7 +41,7 @@ function back() {
   <div class="flex-1 overflow-y-auto p-6 lg:p-12 bg-white">
     <div class="max-w-3xl mx-auto">
       <header class="mb-12">
-        <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tighter flex items-center gap-4">
+        <h2 class="text-4xl font-black text-slate-800 mb-4 tracking-tighter flex items-center gap-4">
           <span class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold">⚙️</span>
           Control Center
         </h2>
@@ -93,7 +93,7 @@ function back() {
                 <span class="text-indigo-600">⚡</span>
                 <label class="text-sm font-black text-indigo-900">Live Query Mode</label>
               </div>
-              <p class="text-[10px] text-indigo-500 font-bold max-w-[180px]">Instant delivery using long-polling API.</p>
+              <p class="text-[10px] text-indigo-500 font-bold max-w-45">Instant delivery using long-polling API.</p>
             </div>
             <ToggleSwitch v-model="localConfig.liveQuery" />
           </div>
@@ -101,7 +101,7 @@ function back() {
 
         <div class="space-y-6 pt-10 border-t-2 border-slate-100">
           <div class="flex flex-col sm:flex-row gap-6">
-            <Button type="submit" class="flex-[2] text-lg h-16 rounded-2xl shadow-xl shadow-indigo-100" label="Apply Configuration">
+            <Button type="submit" class="flex-2 text-lg h-16 rounded-2xl shadow-xl shadow-indigo-100" label="Apply Configuration">
               <template #icon>
                 <i v-if="saveStatus === 'saved'" class="pi pi-check mr-2"></i>
               </template>

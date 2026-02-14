@@ -84,7 +84,7 @@ function onRefresh() {
 </script>
 
 <template>
-  <div class="flex h-screen w-full bg-slate-50 overflow-hidden text-slate-900 relative"> 
+  <div class="flex h-screen w-full bg-slate-50 overflow-hidden text-slate-800 relative"> 
     <!-- Narrow navigation bar (desktop) — icons only -->
     <nav class="hidden md:flex flex-col w-20 bg-indigo-700 text-white items-center py-6 gap-6">
       <button

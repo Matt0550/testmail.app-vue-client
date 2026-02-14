@@ -69,8 +69,8 @@ function isImage(filename: string) {
         <Panel v-if="email" class="h-auto p-4 items-center max-w-6xl mx-auto rounded-xl border-slate-200 shadow-lg">
             <template #header>
                 <div class="flex items-start justify-between gap-4">
-                    <div class="flex flex-col gap-3">
-                        <h2 class="mt-1 text-2xl font-black text-slate-800 leading-tight">{{ email.subject || '(no subject)' }}
+                    <div class="flex flex-col gap-3 w-full">
+                        <h2 class="mt-1 w-full text-xl font-black text-slate-800 leading-tight">{{ email.subject || '(no subject)' }}
                         </h2>
 
                         <div class="min-w-0 flex items-center gap-3 text-sm text-slate-600">
@@ -82,16 +82,15 @@ function isImage(filename: string) {
                                 <div class="text-xs text-slate-400">{{ email.from_parsed?.[0]?.address || '' }}</div>
                             </div>
                             <div class="text-[11px] text-slate-400 mt-1">{{ new Date(email.timestamp).toLocaleString()
-                                }}</div>
+                            }}</div>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-2 self-end">
-                        <Button :icon="showHeaders ? 'pi pi-eye-slash' : 'pi pi-eye'"
-                            :label="showHeaders ? 'Hide Headers' : 'Show Headers'" class="p-button-text p-button-sm"
-                            @click="showHeaders = !showHeaders"></Button>
+                        <Button :icon="showHeaders ? 'pi pi-eye-slash' : 'pi pi-eye'" size="small" variant="text"
+                            label="Headers" @click="showHeaders = !showHeaders"></Button>
 
-                        <Button icon="pi pi-download" label="EML" class="p-button-text p-button-sm"
+                        <Button icon="pi pi-download" label="EML" size="small" variant="text"
                             @click="downloadEML(email)"></Button>
                     </div>
                 </div>
@@ -142,7 +141,7 @@ function isImage(filename: string) {
                         </div>
                         <div v-if="email.spam_report">
                             <p class="text-slate-400 mb-0.5">Spam Report</p>
-                            <p class="font-bold text-slate-700 text-xs break-words">{{ email.spam_report }}</p>
+                            <p class="font-bold text-slate-700 text-xs wrap-break-word">{{ email.spam_report }}</p>
                         </div>
                     </div>
                 </div>
@@ -150,17 +149,20 @@ function isImage(filename: string) {
 
             <!-- verified content -->
             <div class="rounded-lg w-full h-[70vh] bg-white border border-slate-200 overflow-auto">
-                <iframe v-if="email.html" :srcdoc="email.html" sandbox="allow-popups allow-popups-to-escape-sandbox" class="w-full h-full border-none"></iframe>
-                <pre v-else class="p-8 text-sm text-slate-800 whitespace-pre-wrap font-sans leading-relaxed selection:bg-indigo-100">{{ email.text || 'No preview available' }}</pre>
+                <iframe v-if="email.html" :srcdoc="email.html" sandbox="allow-popups allow-popups-to-escape-sandbox"
+                    class="w-full h-full border-none"></iframe>
+                <pre v-else
+                    class="p-8 text-sm text-slate-800 whitespace-pre-wrap font-sans leading-relaxed selection:bg-indigo-100">{{
+                        email.text || 'No preview available' }}</pre>
             </div>
 
             <!-- attachments -->
             <div v-if="email.attachments?.length">
-                            <Divider class="my-8" />
+                <Divider class="my-8" />
 
                 <h3 class="text-lg font-black text-slate-800 mb-6 flex items-center gap-3">Attachments ({{
                     email.attachments.length
-                }})</h3>
+                    }})</h3>
                 <div class="flex flex-wrap gap-2">
                     <div v-for="att in email.attachments" :key="att.filename"
                         class="w-64 flex flex-col p-4 border-2 border-slate-100 rounded-2xl bg-white hover:border-indigo-200 transition-all group overflow-hidden">
@@ -170,7 +172,7 @@ function isImage(filename: string) {
                                 <i class="pi pi-file text-indigo-600 text-lg"></i>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-bold text-slate-900 truncate" :title="att.filename">{{
+                                <p class="text-sm font-bold text-slate-800 truncate" :title="att.filename">{{
                                     att.filename }}</p>
                                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{{ (att.size
                                     /
@@ -193,15 +195,18 @@ function isImage(filename: string) {
 
 
             <!-- Headers modal -->
-            <Dialog v-model:visible="showHeaders" modal :closable="true" dismissable-mask :header="'Email Transport Headers'" :style="{ width: '50rem' }" class="bg-slate-800 text-white border-none rounded-xl shadow-lg">
-                <pre class="font-mono text-xs leading-snug p-4 max-h-96 overflow-auto text-slate-200 bg-slate-900 rounded-lg"
-                    >{{ headerText }}</pre>
+            <Dialog v-model:visible="showHeaders" modal :closable="true" dismissable-mask
+                :header="'Email Transport Headers'" :style="{ width: '50rem' }"
+                class="bg-slate-800 text-white border-none rounded-xl shadow-lg">
+                <pre
+                    class="font-mono text-xs leading-snug p-4 max-h-96 overflow-auto text-slate-200 bg-slate-900 rounded-lg">{{
+        headerText }}</pre>
             </Dialog>
         </Panel>
 
         <div v-else class="h-full flex items-center justify-center text-slate-400">
             <div class="flex flex-col items-center text-center mx-auto max-w-md">
-                    <i class="pi pi-envelope text-6xl text-slate-200 mb-3"></i>
+                <i class="pi pi-envelope text-6xl text-slate-200 mb-3"></i>
                 <div class="text-lg font-black">Select a message</div>
                 <div class="text-sm text-slate-400 mt-2">Your testing emails will appear in the sidebar.</div>
             </div>
