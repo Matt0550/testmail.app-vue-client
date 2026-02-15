@@ -15,11 +15,17 @@ const emit = defineEmits<{
     (e: 'setOffset', o: number): void;
 }>();
 
+// client-side paging of the passed `emails` array
+const pageCount = computed(() => Math.max(1, Math.ceil(props.emails.length / Math.max(1, props.limit))));
+const currentPage = computed(() => Math.floor(props.offset / Math.max(1, props.limit)) + 1);
+const startIndex = computed(() => Math.min(props.offset, props.emails.length));
+const endIndex = computed(() => Math.min(props.offset + props.limit, props.emails.length));
+const pagedEmails = computed(() => props.emails.slice(startIndex.value, endIndex.value));
 const empty = computed(() => props.emails.length === 0);
 
 function onSelect(id: string) { emit('select', id); }
 function onDelete(id: string) { emit('delete', id); }
-function setOffset(o: number) { emit('setOffset', o); }
+function setOffset(o: number) { emit('setOffset', Math.max(0, o)); }
 </script>
 
 <template>
@@ -33,7 +39,7 @@ function setOffset(o: number) { emit('setOffset', o); }
             </div>
 
             <div v-else>
-                <div v-for="email in emails" :key="email.id" @click="onSelect(email.id)" :class="[
+                <div v-for="email in pagedEmails" :key="email.id" @click="onSelect(email.id)" :class="[
                     'w-full block text-left py-3 px-3 pl-4 border-b border-slate-200 transition-colors hover:cursor-pointer hover:bg-slate-50 relative group outline-none',
                     selectedId === email.id ? 'bg-indigo-50 border-l-4 border-indigo-500' : ''
                 ]">
@@ -69,11 +75,14 @@ function setOffset(o: number) { emit('setOffset', o); }
         </div>
 
         <div class="h-12 border-t border-slate-200 px-4 flex items-center justify-between bg-slate-50/50 shrink-0">
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Offset: {{ offset }}</span>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <span v-if="!empty">Showing {{ startIndex + 1 }}–{{ endIndex }} (Page {{ currentPage }} / {{ pageCount }})</span>
+              <span v-else>No emails</span>
+            </div>
             <div class="flex gap-2">
-                <Button icon="pi pi-angle-left" size="small" variant="text" :disabled="offset === 0"
+                <Button icon="pi pi-angle-left" size="small" variant="text" :disabled="offset === 0 || currentPage <= 1"
                     @click="setOffset(offset - limit)"></Button>
-                <Button icon="pi pi-angle-right" size="small" variant="text" :disabled="emails.length < limit"
+                <Button icon="pi pi-angle-right" size="small" variant="text" :disabled="offset + limit >= emails.length || currentPage >= pageCount"
                     @click="setOffset(offset + limit)"></Button>
             </div>
         </div>

@@ -87,11 +87,24 @@ export function useEmails({ config, limit, offset, filterTag, filterTimestamp, f
       if (params.isLiveQuery && (err.status === 502 || err.status === 504)) {
         return; // expected in live query
       }
+
       if (mounted && !params.isLiveQuery) {
-        error.value = err.message || 'Failed to fetch emails';
+        // network-level issues
+        const networkDown = !navigator.onLine || (err && /Failed to fetch|NetworkError/i.test(err.message || ''));
+        if (networkDown) {
+          error.value = 'Network error — offline or request blocked';
+        } else if (err?.status) {
+          error.value = `API error (status ${err.status}) — ${err.message || 'Unexpected server response'}`;
+        } else {
+          error.value = err.message || 'Failed to fetch emails';
+        }
+        // keep details in console for debugging
+        // eslint-disable-next-line no-console
+        console.error('fetchEmails error:', err);
       } else {
         // keep silent for polling errors
-        // console.log('Polling status/error:', err.message);
+        // eslint-disable-next-line no-console
+        console.debug('Polling error (ignored):', err?.message ?? err);
       }
     } finally {
       if (!mounted) return;

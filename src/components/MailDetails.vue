@@ -7,12 +7,14 @@ import Divider from 'primevue/divider';
 const props = defineProps<{
     email: any | null;
     namespace?: string;
+    isMobile?: boolean;
 }>();
 
 const emit = defineEmits<{
     (e: 'delete', id: string): void;
     (e: 'prev'): void;
     (e: 'next'): void;
+    (e: 'closeMobile'): void;
 }>();
 
 import { ref, computed } from 'vue';
@@ -65,12 +67,16 @@ function isImage(filename: string) {
 </script>
 
 <template>
-    <div class="flex-1 overflow-auto p-6">
-        <Panel v-if="email" class="h-auto p-4 items-center max-w-6xl mx-auto rounded-xl border-slate-200 shadow-lg">
+    <div class="flex-1 overflow-auto px-4 sm:px-6 py-4">
+        <Panel v-if="email"
+            class="h-auto p-3 sm:p-6 items-center max-w-6xl mx-3 sm:mx-auto rounded-xl border-slate-200 shadow-lg">
             <template #header>
                 <div class="flex items-start justify-between gap-4">
+                    <Button v-if="isMobile" type="button" class=" text-slate-500 hover:bg-slate-100 mr-2"
+                        @click="$emit('closeMobile')" aria-label="Back" icon="pi pi-arrow-left" variant="text" size="small"></Button>
+
                     <div class="flex flex-col gap-3 w-full">
-                        <h2 class="mt-1 w-full text-xl font-black text-slate-800 leading-tight">{{ email.subject || '(no subject)' }}
+                        <h2 class="mt-1 w-full text-lg sm:text-xl font-black text-slate-800 leading-tight truncate">{{ email.subject || '(no subject)' }}
                         </h2>
 
                         <div class="min-w-0 flex items-center gap-3 text-sm text-slate-600">
@@ -82,7 +88,7 @@ function isImage(filename: string) {
                                 <div class="text-xs text-slate-400">{{ email.from_parsed?.[0]?.address || '' }}</div>
                             </div>
                             <div class="text-[11px] text-slate-400 mt-1">{{ new Date(email.timestamp).toLocaleString()
-                            }}</div>
+                                }}</div>
                         </div>
                     </div>
 
@@ -98,7 +104,8 @@ function isImage(filename: string) {
 
             <!-- recipients / context box -->
 
-            <div class="border border-slate-200 rounded-2xl bg-slate-50 p-6 mb-8 flex flex-col md:flex-row gap-8">
+            <div
+                class="border border-slate-200 rounded-2xl bg-slate-50 p-3 sm:p-6 mb-6 flex flex-col md:flex-row gap-4 sm:gap-6">
                 <div class="flex-1">
                     <div
                         class="flex items-center gap-2 text-[10px] text-slate-400 uppercase tracking-widest font-black mb-3">
@@ -148,9 +155,10 @@ function isImage(filename: string) {
             </div>
 
             <!-- verified content -->
-            <div class="rounded-lg w-full h-[70vh] bg-white border border-slate-200 overflow-auto">
+            <div
+                class="rounded-lg w-full max-w-5xl sm:h-[75vh] h-[60vh] bg-white border border-slate-200 overflow-auto mx-auto">
                 <iframe v-if="email.html" :srcdoc="email.html" sandbox="allow-popups allow-popups-to-escape-sandbox"
-                    class="w-full h-full border-none"></iframe>
+                    class="w-full h-full border-none rounded-md"></iframe>
                 <pre v-else
                     class="p-8 text-sm text-slate-800 whitespace-pre-wrap font-sans leading-relaxed selection:bg-indigo-100">{{
                         email.text || 'No preview available' }}</pre>
@@ -162,26 +170,26 @@ function isImage(filename: string) {
 
                 <h3 class="text-lg font-black text-slate-800 mb-6 flex items-center gap-3">Attachments ({{
                     email.attachments.length
-                    }})</h3>
-                <div class="flex flex-wrap gap-2">
+                }})</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     <div v-for="att in email.attachments" :key="att.filename"
-                        class="w-64 flex flex-col p-4 border-2 border-slate-100 rounded-2xl bg-white hover:border-indigo-200 transition-all group overflow-hidden">
+                        class="w-full flex flex-col p-2 sm:p-3 border-2 border-slate-100 rounded-xl bg-white hover:border-indigo-200 transition-all group overflow-hidden text-sm">
                         <div class="flex items-center mb-3">
                             <div
-                                class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center mr-3 shrink-0">
+                                class="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-50 rounded-lg sm:rounded-xl flex items-center justify-center mr-3 shrink-0">
                                 <i class="pi pi-file text-indigo-600 text-lg"></i>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-bold text-slate-800 truncate" :title="att.filename">{{
+                                <p class="text-sm font-semibold text-slate-800 truncate" :title="att.filename">{{
                                     att.filename }}</p>
-                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">{{ (att.size
+                                <p class="text-[9px] font-medium text-slate-400 uppercase tracking-tighter">{{ (att.size
                                     /
                                     1024).toFixed(1) }} KB</p>
                             </div>
                         </div>
                         <div v-if="isImage(att.filename)"
                             class="mb-3 rounded-lg overflow-hidden bg-slate-50 border border-slate-100 aspect-video relative group-hover:shadow-inner transition-shadow">
-                            <img alt="Preview" class="w-full h-full object-cover" :src="att.downloadUrl">
+                            <img alt="Preview" class="w-full h-full object-cover" :src="att.downloadUrl" />
                         </div>
                         <div class="flex gap-2 mt-auto">
                             <a :href="att.downloadUrl" target="_blank" rel="noreferrer" class="flex-1">
@@ -200,7 +208,7 @@ function isImage(filename: string) {
                 class="bg-slate-800 text-white border-none rounded-xl shadow-lg">
                 <pre
                     class="font-mono text-xs leading-snug p-4 max-h-96 overflow-auto text-slate-200 bg-slate-900 rounded-lg">{{
-        headerText }}</pre>
+                        headerText }}</pre>
             </Dialog>
         </Panel>
 

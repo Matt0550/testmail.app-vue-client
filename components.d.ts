@@ -20,6 +20,7 @@ declare module 'vue' {
     InputText: typeof import('primevue/inputtext')['default']
     MailDetails: typeof import('./src/components/MailDetails.vue')['default']
     MailList: typeof import('./src/components/MailList.vue')['default']
+    Panel: typeof import('primevue/panel')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollPanel: typeof import('primevue/scrollpanel')['default']

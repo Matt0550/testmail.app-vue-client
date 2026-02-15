@@ -11,6 +11,21 @@ const routes = [
         component: BaseView,
     },
 
+    // Settings (render same layout but show settings pane)
+    {
+        path: '/settings',
+        name: 'Settings',
+        component: BaseView,
+    },
+
+    // Mail deep-link (renders layout and opens the specified message)
+    {
+        path: '/mails/:id',
+        name: 'Mail',
+        component: BaseView,
+        props: true
+    },
+
     // Not Found Route
     {
         path: '/:pathMatch(.*)*',

@@ -5,7 +5,6 @@ const props = defineProps<{
   isLoading: boolean;
   filterTag: string;
   filterTimestamp: string;
-  filterSubject: string;
   limit: number;
 }>();
 
@@ -15,7 +14,6 @@ const emit = defineEmits<{
   (e: 'openMenu'): void;
   (e: 'update:filterTag', v: string): void;
   (e: 'update:filterTimestamp', v: string): void;
-  (e: 'update:filterSubject', v: string): void;
   (e: 'update:limit', v: number): void;
 }>();
 
@@ -28,9 +26,6 @@ function onTagInput(e: Event) {
   emit('update:filterTag', (e.target as HTMLInputElement).value);
 }
 
-function onSubjectInput(e: Event) {
-  emit('update:filterSubject', (e.target as HTMLInputElement).value);
-}
 
 function onTimestampInput(e: Event) {
   emit('update:filterTimestamp', (e.target as HTMLInputElement).value);
@@ -53,7 +48,7 @@ function onLimitChange(e: Event) {
           <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
-            placeholder="Search locally..."
+            placeholder="Search subject (local + server)"
             class="w-full bg-slate-100 border-none rounded-full py-2 pl-10 pr-4 text-sm text-slate-800 placeholder:text-slate-400 focus:ring-1 focus:ring-indigo-200 transition-all outline-none"
             :value="props.searchQuery"
             @input="onSearchInput"
@@ -79,14 +74,6 @@ function onLimitChange(e: Event) {
           class="bg-transparent border-none outline-none w-28 text-indigo-600 font-medium placeholder:text-slate-300"
           :value="props.filterTag"
           @input="onTagInput"
-          @keydown.enter="$emit('refresh')"
-        />
-        <input
-          type="text"
-          placeholder="Subject (server-side)"
-          class="bg-transparent border-none outline-none w-56 text-slate-600 placeholder:text-slate-300 ml-2"
-          :value="props.filterSubject"
-          @input="onSubjectInput"
           @keydown.enter="$emit('refresh')"
         />
         <div class="w-px h-4 bg-slate-200" />
