@@ -12,7 +12,7 @@
   <h3 align="center">TestMail.app Email Viewer</h3>
 
   <p align="center">
-    A lightweight client for inspecting and testing emails. Offline-capable PWA with local storage for email headers and content.
+    A lightweight client for inspecting and debugging emails from Testmail.app service. Offline-capable PWA with local storage for email headers and content.
     <br />
     <br />
     <a href="https://matt05.it/testmailapp">Try It Now</a>
