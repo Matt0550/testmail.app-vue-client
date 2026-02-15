@@ -121,7 +121,17 @@ watch(() => route.fullPath, () => {
     if (!isMobile.value) mobileViewingDetails.value = false;
   }
 }, { immediate: true });
-
+// if config incomplete, force settings route
+watch(() => config.value, (cfg) => {
+  const needsConfig = !cfg.apiKey || !cfg.namespace;
+  if (needsConfig) {
+    isSettingsOpen.value = true;
+    if (route.name !== 'Settings') router.replace({ name: 'Settings' }).catch(() => {});
+  } else {
+    // when user adds config and we're still on /settings, go home
+    if (route.name === 'Settings') router.replace({ name: 'Home' }).catch(() => {});
+  }
+}, { immediate: true, deep: true });
 // when selectedEmailId is cleared programmatically, ensure URL returns to Home
 watch(selectedEmailId, (id) => {
   if (!id && route.name === 'Mail') router.replace({ name: 'Home' }).catch(() => { });
@@ -244,7 +254,7 @@ function onRefresh() {
       </template>
 
       <template v-else>
-        <div class="flex flex-col overflow-hidden">
+        <div class="flex flex-col overflow-hidden h-full">
           <!-- Top bar -->
           <TopBar v-model:searchQuery="searchQuery" :lastRefreshed="lastRefreshed"
             :isLoading="isLoading || isLivePolling" v-model:filterTag="filterTag"

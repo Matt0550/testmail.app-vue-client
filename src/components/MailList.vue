@@ -32,7 +32,7 @@ function setOffset(o: number) { emit('setOffset', Math.max(0, o)); }
     <div class="w-full md:w-80 lg:w-96 border-r border-slate-100 bg-white flex flex-col shrink-0 h-full shadow-sm">
         <div class="flex-1 overflow-y-auto w-full">
             <div v-if="empty"
-                class="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400 mt-20">
+                class="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400 h-full">
                 <i class="pi pi-inbox text-4xl opacity-20 mb-4"></i>
                 <p class="text-sm font-medium">No emails found</p>
                 <p class="text-xs">Check filters or fetch again.</p>
